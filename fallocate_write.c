@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <linux/falloc.h>
 
-int main(int argc, char *argv[]) {
+int main() {
 	printf("reading from /dev/urandom\n");
 	int in = open("/dev/urandom", O_RDONLY);
 	if(in < 0) {
@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
 	printf("writing to %s\n", name);
 	/* gocryptfs writes 128kiB + encryption overhead blocks */
 	char buf[132096];
-	printf("writing blocks of %d bytes each\n", sizeof(buf));
+	printf("writing blocks of %ld bytes each\n", sizeof(buf));
 	long off = 0;
 	for(int i = 1; ; i++) {
 		int n = read(in, buf, sizeof(buf));
@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
 		}
 		off += sizeof(buf);
 		if(i%100 == 0) {
-			printf("wrote %d blocks, total %d MiB\n",
+			printf("wrote %d blocks, total %ld MiB\n",
 				i, i*sizeof(buf)/1024/1024);
 		}
 	}
