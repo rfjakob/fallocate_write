@@ -22,7 +22,8 @@ int main() {
 	/* gocryptfs writes 128kiB + encryption overhead blocks */
 	char buf[132096];
 	printf("writing blocks of %ld bytes each\n", sizeof(buf));
-	long off = 0;
+	/* we start at offset 18 due to the gocryptfs header */
+	long off = 18;
 	for(int i = 1; ; i++) {
 		int n = read(in, buf, sizeof(buf));
 		if(n == 0){
