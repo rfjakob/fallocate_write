@@ -3,4 +3,4 @@ fallocate_write: fallocate_write.c Makefile
 
 .PHONY: clean
 clean:
-	rm -f fallocate_write
+	rm -f fallocate_write blob.*
