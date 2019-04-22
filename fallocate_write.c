@@ -37,10 +37,14 @@ int main() {
 			printf("short read, retrying\n");
 			continue;
 		}
-		fallocate(out, FALLOC_FL_KEEP_SIZE, off, sizeof(buf));
-		n = write(out, buf, sizeof(buf));
+		n = fallocate(out, FALLOC_FL_KEEP_SIZE, off, sizeof(buf));
+		if(n != 0) {
+			perror("fallocate failed");
+			exit(1);
+		}
+		n = pwrite(out, buf, sizeof(buf), off);
 		if(n < 0) {
-			perror("write failed");
+			perror("pwrite failed");
 			exit(1);
 		}
 		if(n != sizeof(buf)) {
