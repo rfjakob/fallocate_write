@@ -48,16 +48,19 @@ int main() {
 				perror("fallocate failed");
 				exit(1);
 			}
-			n = pwrite(out, buf, sizeof(buf), off);
-			if(n < 0) {
-				perror("pwrite failed");
-				exit(1);
+			int remain = sizeof(buf);
+			while(remain > 0) {
+				n = pwrite(out, buf-remain+sizeof(buf), remain, off);
+				if(n < 0) {
+					perror("pwrite failed");
+					exit(1);
+				}
+				if(n != remain) {
+					printf("short write (%d of %d bytes), retrying\n", n, remain);
+				}
+				off += n;
+				remain -= n;
 			}
-			if(n != sizeof(buf)) {
-				printf("short write\n");
-				exit(1);
-			}
-			off += sizeof(buf);
 		}
 		gettimeofday(&t2, NULL);
 		float deltat = ( t2.tv_sec - t1.tv_sec ) + (t2.tv_usec - t1.tv_usec) / 1000000.0;
