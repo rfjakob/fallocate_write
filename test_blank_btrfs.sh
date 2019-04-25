@@ -6,7 +6,7 @@ uname -a
 IMG=$(mktemp)
 MNT=$IMG.mnt
 mkdir $MNT
-truncate -s 1G $IMG
+fallocate -l 1G $IMG
 mkfs.btrfs -q $IMG
 sudo mount $IMG $MNT
 echo "mounted at $MNT"
